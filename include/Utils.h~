@@ -1,0 +1,60 @@
+#pragma once
+
+#include <assert.h>
+
+#include <algorithm>
+#include <functional>
+#include <iterator>
+#include <vector>
+
+
+#define ror32(x,n) ( ((x) >> (n)) | ((x) << (32-(n))) )
+#define rol32(x,n) ( ((x) << (n)) | ((x) >> (32-(n))) )
+
+#ifdef __GNUC__
+#define ror32fixed ror32
+#define rol32fixed rol32
+#else
+#define rol32fixed(x,n) (_rorx_u32(x, 32-n))
+#define ror32fixed(x,n) (_rorx_u32(x, n))
+#endif
+
+#ifdef __GNUC__
+#define max(a,b) \
+	   ({ __typeof__ (a) _a = (a); \
+		   __typeof__ (b) _b = (b); \
+		 _a > _b ? _a : _b; })
+#else
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#endif
+
+#ifdef __GNUC__
+#define min(a,b) \
+	   ({ __typeof__ (a) _a = (a); \
+		   __typeof__ (b) _b = (b); \
+		 _a < _b ? _a : _b; })
+#else
+#define min(a,b) ((a) < (b) ? (a) : (b))
+#endif
+
+#define BYTEVECTOR_XOR(RESULT, OP1, OP2) { std::transform(OP1.begin(), OP1.end(), OP2.begin(), std::begin(RESULT), std::bit_xor<uint8_t>()); }
+
+/*template <typename T>
+std::vector<T> operator+(const std::vector<T>& a, const std::vector<T>& b)
+{
+	assert(a.size() == b.size());
+
+	std::vector<T> result;
+	result.reserve(a.size());
+
+	std::transform(a.begin(), a.end(), b.begin(),
+		std::back_inserter(result), std::bit_xor<T>());
+	return result;
+}*/
+
+namespace Utils
+{
+	void print8(uint8_t *data, int n);
+	void print32(uint32_t *data, int n);
+}
+
